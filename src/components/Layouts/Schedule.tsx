@@ -16,10 +16,6 @@ const Schedule: React.FC = () => {
     console.log(clickInfo.event.start);
   };
 
-  const handleDateClick = (clickInfo: EventClickArg) => {
-    console.log(clickInfo);
-  };
-
   const handleClickOpen = () => {
     setOpen(true);
   };

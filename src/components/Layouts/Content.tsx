@@ -70,7 +70,7 @@ const Content: React.FC<IContentProps> = (props) => {
     props.isAuthGoogle();
     props.getClasses();
     console.log(props.match.params.dashId);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const { window } = props;
   const classes = useStyles();
@@ -79,10 +79,6 @@ const Content: React.FC<IContentProps> = (props) => {
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
-  };
-
-  const handleChange = () => {
-    return;
   };
 
   const container =

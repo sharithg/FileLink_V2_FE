@@ -1,6 +1,5 @@
 import React, { Fragment, useState, useEffect, ChangeEvent } from "react";
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -96,7 +95,7 @@ const AddFile: React.FC<IAddFilesProps> = (props) => {
     if (file_type === "slides") {
       setMimeType("application/vnd.google-apps.presentation");
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleClose = () => {
     setOpen(false);

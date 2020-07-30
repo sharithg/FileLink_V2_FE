@@ -1,5 +1,4 @@
 import React, { FunctionComponent } from "react";
-import PropTypes from "prop-types";
 import { Route, Redirect, RouteComponentProps } from "react-router-dom";
 
 interface IDashRouteProps {

@@ -41,7 +41,7 @@ function classesReducer(
         "#FF00FF",
         "#0000FF",
       ];
-      classes.map((the_class, index) => {
+      classes.forEach((the_class, index) => {
         the_class.color = colors[index];
       });
       return {

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { returnErrors, createMessage } from "./messagesAction";
+import { returnErrors } from "./messagesAction";
 //Types
 import {
   GET_CLASSES,

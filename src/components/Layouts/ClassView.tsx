@@ -1,8 +1,6 @@
 import React, { Fragment, useEffect } from "react";
 import { connect } from "react-redux";
-import { setCurrClass } from "../../actions/classAction";
 import { getFiles } from "../../actions/filesAction";
-import PropTypes from "prop-types";
 import FileTable from "./FileTable";
 import { IFiles, IRootState } from "../../actions/types";
 
@@ -14,7 +12,7 @@ interface IClassViewProps {
 const ClassView: React.FC<IClassViewProps> = (props) => {
   useEffect(() => {
     props.getFiles();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <Fragment>
       <FileTable files={props.files} current_class="" />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment, ChangeEvent } from "react";
+import React, { useState, Fragment, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import Divider from "@material-ui/core/Divider";
 import ListSubheader from "@material-ui/core/ListSubheader";
@@ -39,10 +39,6 @@ interface ISidebarProps {
   setCurrClass: (dash_id: string) => void;
 }
 
-function isEmptyOrSpaces(str: string) {
-  return str === null || str.match(/^ *$/) !== null;
-}
-
 const Sidebar: React.FC<ISidebarProps> = (props) => {
   const classes = useStyles();
 
@@ -63,7 +59,6 @@ const Sidebar: React.FC<ISidebarProps> = (props) => {
   const [is_disbled_add, setDisabledAdd] = useState(true);
   const [is_error_text, setErrorText] = useState(false);
   const [helper_text, setHelperText] = useState("");
-  const [selected, setSelectItem] = useState("sc");
 
   const handleAddClass = (
     event: React.MouseEvent<HTMLLIElement, MouseEvent>
@@ -111,6 +106,7 @@ const Sidebar: React.FC<ISidebarProps> = (props) => {
             width: "199px",
             margin: "0.84em 0.5em 0.85em 0.5em",
           }}
+          alt=""
         />
       </span>
       <Divider />
