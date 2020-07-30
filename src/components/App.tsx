@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 // React components
 import { Content } from "./Layouts";
+import Home from "./Home/Home";
 import {
   Login,
   Register,
@@ -34,6 +35,7 @@ class App extends Component {
           <Fragment>
             <div className="container">
               <Switch>
+                <Route exact path="/" component={Home} />
                 <PrivateRoute path="/dashboard" component={Content} />
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/login" component={Login} />

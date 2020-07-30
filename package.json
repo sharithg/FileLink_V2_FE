@@ -13,7 +13,6 @@
     "@material-ui/pickers": "^3.2.10",
     "axios": "^0.19.2",
     "date-fns": "^2.0.0-beta.5",
-    "next": "^9.4.4",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-alert": "^7.0.1",
@@ -29,15 +28,10 @@
     "typescript": "~3.7.2"
   },
   "scripts": {
-    "react-start": "react-scripts start",
-    "react-build": "react-scripts build && mv build/ react_build/",
-    "react-test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!ui-core)/\" --env=jsdom",
-    "react-eject": "react-scripts eject",
-    "next-dev": "next",
-    "next-build": "next build && next export -o next_build/",
-    "next-start": "next start",
-    "build-all": "yarn react-build && yarn next-build",
-    "prod": "yarn build-all && mv -t ../dist/ react_build/ next_build/"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!ui-core)/\" --env=jsdom",
+    "eject": "react-scripts eject"
   },
   "browserslist": {
     "production": [
