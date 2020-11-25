@@ -1,7 +1,7 @@
 import { CREATE_MESSAGE, GET_ERRORS } from "./types";
 
 //CREATE message
-export const createMessage = (message: object) => {
+export const createMessage = (message: string) => {
   return {
     type: CREATE_MESSAGE,
     payload: message,
@@ -10,7 +10,7 @@ export const createMessage = (message: object) => {
 
 // RETURN errors
 
-export const returnErrors = (message: object, status: string) => {
+export const returnErrors = (message: string, status: string) => {
   return {
     type: GET_ERRORS,
     payload: { message, status },

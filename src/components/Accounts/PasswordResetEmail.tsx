@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Helmet } from "react-helmet";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "../../actions/types";
 import { resetPassword } from "../../actions/authAction";
 import { Loader } from "../../common";
@@ -56,16 +56,23 @@ interface IPasswordResetEmailProps {
 const PasswordResetEmail: React.FC<IPasswordResetEmailProps> = (props) => {
   const classes = useStyles();
   const email = useRef<HTMLInputElement>(null);
+  //Redux state
+  const password_email_sent = useSelector(
+    (state: IRootState) => state.auth.password_email_sent
+  );
+  const isResetLoading = useSelector(
+    (state: IRootState) => state.auth.isResetLoading
+  );
+  const dispatch = useDispatch();
 
   const handleSubmit = (event: MouseEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (email.current === null) return;
-    props.resetPassword(email.current.value);
+    dispatch(resetPassword(email.current.value));
   };
 
-  if (props.password_email_sent)
-    return <h1>Password rest instructions sent</h1>;
-  if (props.isResetLoading) return <Loader />;
+  if (password_email_sent) return <h1>Password rest instructions sent</h1>;
+  if (isResetLoading) return <Loader />;
 
   return (
     <Container component="main" maxWidth="xs">
@@ -115,9 +122,4 @@ const PasswordResetEmail: React.FC<IPasswordResetEmailProps> = (props) => {
   );
 };
 
-const mapStateToProps = (state: IRootState) => ({
-  password_email_sent: state.auth.password_email_sent,
-  isResetLoading: state.auth.isResetLoading,
-});
-
-export default connect(mapStateToProps, { resetPassword })(PasswordResetEmail);
+export default PasswordResetEmail;

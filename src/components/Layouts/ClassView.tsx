@@ -1,27 +1,23 @@
 import React, { Fragment, useEffect } from "react";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { getFiles } from "../../actions/filesAction";
 import FileTable from "./FileTable";
-import { IFiles, IRootState } from "../../actions/types";
+import { IRootState } from "../../actions/types";
 
-interface IClassViewProps {
-  getFiles: () => void;
-  files: IFiles[];
-}
-
-const ClassView: React.FC<IClassViewProps> = (props) => {
+const ClassView: React.FC = (props) => {
+  const files = useSelector((state: IRootState) => state.files.files);
+  const current_class = useSelector(
+    (state: IRootState) => state.classes.current_class
+  );
+  const dispatch = useDispatch();
   useEffect(() => {
-    props.getFiles();
+    dispatch(getFiles());
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <Fragment>
-      <FileTable files={props.files} current_class="" />
+      <FileTable files={files} current_class={current_class} />
     </Fragment>
   );
 };
 
-const mapStateToProps = (state: IRootState) => ({
-  files: state.files.files,
-});
-
-export default connect(mapStateToProps, { getFiles })(ClassView);
+export default ClassView;

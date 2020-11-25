@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from "react";
 import Navbar from "./Navbar";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Route, Switch, RouteComponentProps } from "react-router-dom";
 import { DashRoute, GAuthRoute, GoogleRoute } from "../../common";
 import { Helmet } from "react-helmet";
@@ -17,7 +17,7 @@ import {
 } from "@material-ui/core";
 //Layouts
 import { isAuthGoogle } from "../../actions/googleAction";
-import { getClasses, setCurrClass } from "../../actions/classAction";
+import { getClasses } from "../../actions/classAction";
 import { Auth } from "../GoogleAuth";
 import DashView from "./DashView";
 import ClassView from "./ClassView";
@@ -59,17 +59,16 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 interface IContentProps extends RouteComponentProps<{ dashId: string }> {
-  isAuthGoogle: () => void;
-  getClasses: () => void;
   classes: Array<IClasses>;
   window: Window;
 }
 
 const Content: React.FC<IContentProps> = (props) => {
+  const classes_s = useSelector((state: IRootState) => state.classes.classes);
+  const dispatch = useDispatch();
   useEffect(() => {
-    props.isAuthGoogle();
-    props.getClasses();
-    console.log(props.match.params.dashId);
+    dispatch(isAuthGoogle());
+    dispatch(getClasses());
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const { window } = props;
@@ -109,7 +108,7 @@ const Content: React.FC<IContentProps> = (props) => {
               }}
               elevation={2}
             >
-              <Sidebar classes={props.classes} />
+              <Sidebar classes={classes_s} />
             </Drawer>
           </Hidden>
           <Hidden xsDown implementation="css">
@@ -120,7 +119,7 @@ const Content: React.FC<IContentProps> = (props) => {
               variant="permanent"
               open
             >
-              <Sidebar classes={props.classes} />
+              <Sidebar classes={classes_s} />
             </Drawer>
           </Hidden>
         </nav>
@@ -151,14 +150,4 @@ const Content: React.FC<IContentProps> = (props) => {
   );
 };
 
-const mapStateToProps = (state: IRootState) => ({
-  files: state.files.files,
-  isGoogleAuth: state.google.isGoogleAuth,
-  classes: state.classes.classes,
-});
-
-export default connect(mapStateToProps, {
-  isAuthGoogle,
-  getClasses,
-  setCurrClass,
-})(Content);
+export default Content;

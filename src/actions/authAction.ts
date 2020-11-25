@@ -3,7 +3,6 @@ import { returnErrors } from "./messagesAction";
 import {
   USER_LOADED,
   USER_LOADING,
-  AUTH_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT_SUCCESS,
@@ -32,8 +31,8 @@ export const loadUser = () => (
       dispatch({ type: USER_LOADED, payload: res.data });
     })
     .catch((err) => {
-      dispatch(returnErrors(err.response.data, err.response.status));
-      dispatch({ type: AUTH_ERROR });
+      // dispatch(returnErrors(err.response.data, err.response.status));
+      // dispatch({ type: AUTH_ERROR });
     });
 };
 
@@ -50,13 +49,15 @@ export const login = (username: string, password: string) => (
   //request body
   const body = JSON.stringify({ username, password });
 
+  console.log(username, password);
+
   axios
     .post(`http://${DOMAIN}/api/auth/login/`, body, config)
     .then((res) => {
       dispatch({ type: LOGIN_SUCCESS, payload: res.data });
     })
     .catch((err) => {
-      dispatch(returnErrors(err.response.data, err.response.status));
+      // dispatch(returnErrors(err.response.data, err.response.status));
       dispatch({ type: LOGIN_FAIL });
     });
 };
@@ -74,7 +75,9 @@ export const registerUser = ({
   };
 
   //request body
-  const body = JSON.stringify({ username, password, email });
+  const body = { username, email, password };
+
+  console.log(body);
 
   axios
     .post(`http://${DOMAIN}/api/auth/register/`, body, config)
@@ -82,7 +85,7 @@ export const registerUser = ({
       dispatch({ type: REGISTER_SUCCESS, payload: res.data });
     })
     .catch((err) => {
-      dispatch(returnErrors(err.response.data, err.response.status));
+      // dispatch(returnErrors(err.response.data, err.response.status));
       dispatch({ type: REGISTER_FAIL });
     });
 };
@@ -121,7 +124,7 @@ export const resetPassword = (email: string) => (dispatch: Dispatch) => {
       console.log(body);
     })
     .catch((err) => {
-      dispatch(returnErrors(err.response.data, err.response.status));
+      // dispatch(returnErrors(err.response.data, err.response.status));
     });
 };
 
@@ -145,7 +148,7 @@ export const setNewPassword = (body: {
       console.log(body);
     })
     .catch((err) => {
-      dispatch(returnErrors(err.response.data, err.response.status));
+      // dispatch(returnErrors(err.response.data, err.response.status));
     });
 };
 // const checkAuth = () => (dispatch, getState) => {};

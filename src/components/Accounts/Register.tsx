@@ -10,11 +10,10 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { registerUser } from "../../actions/authAction";
-import { createMessage } from "../../actions/messagesAction";
 import { Redirect } from "react-router-dom";
-import { CredentialTypes, IRootState } from "../../actions/types";
+import { IRootState } from "../../actions/types";
 import { Helmet } from "react-helmet";
 
 function Copyright() {
@@ -56,8 +55,6 @@ const useStyles = makeStyles((theme) => ({
 
 interface IRegisterProps {
   isAuthenticated: boolean | null;
-  createMessage: (message: { passwordNotMatch: string }) => void;
-  registerUser: (user: CredentialTypes) => void;
 }
 
 const Register: React.FC<IRegisterProps> = (props) => {
@@ -66,6 +63,10 @@ const Register: React.FC<IRegisterProps> = (props) => {
   const email = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
   const confirmPassword = useRef<HTMLInputElement>(null);
+  const isAuthenticated = useSelector<IRootState>(
+    (state) => state.auth.isAuthenticated
+  );
+  const dispatch = useDispatch();
 
   const handleSubmit = (event: MouseEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -78,18 +79,18 @@ const Register: React.FC<IRegisterProps> = (props) => {
       return;
     console.log(event);
     if (password.current.value !== confirmPassword.current.value) {
-      props.createMessage({ passwordNotMatch: "Passwords do not match" });
+      // createMessage({ passwordNotMatch: "Passwords do not match" });
     } else {
       const newUser = {
         username: username.current.value,
         password: password.current.value,
         email: email.current.value,
       };
-      props.registerUser(newUser);
+      dispatch(registerUser(newUser));
     }
   };
 
-  if (props.isAuthenticated) {
+  if (isAuthenticated) {
     return <Redirect to="/dashboard" />;
   }
 
@@ -187,13 +188,7 @@ const Register: React.FC<IRegisterProps> = (props) => {
   );
 };
 
-const mapStateToProps = (state: IRootState) => ({
-  isAuthenticated: state.auth.isAuthenticated,
-});
-
-export default connect(mapStateToProps, { registerUser, createMessage })(
-  Register
-);
+export default Register;
 
 // import React, { Component, Fragment } from "react";
 // import { Link, Redirect } from "react-router-dom";

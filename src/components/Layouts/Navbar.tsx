@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../actions/authAction";
 import { googleLogout } from "../../actions/googleAction";
 //MUI
@@ -9,8 +9,14 @@ import {
   Typography,
   makeStyles,
   Theme,
+  Button,
+  Menu,
+  MenuItem,
+  IconButton,
 } from "@material-ui/core";
-import { IRootState, IAuthState } from "../../actions/types";
+import SettingsIcon from "@material-ui/icons/Settings";
+import MenuIcon from "@material-ui/icons/Menu";
+import { IRootState } from "../../actions/types";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -20,55 +26,81 @@ const useStyles = makeStyles((theme: Theme) => ({
       marginLeft: drawerWidth,
     },
   },
+  menuButton: {
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up("sm")]: {
+      display: "none",
+    },
+  },
+  username: {
+    flexGrow: 1,
+  },
+  button: {
+    marginRight: theme.spacing(2),
+  },
 }));
 
 interface INavbarProps {
-  auth: IAuthState;
   handleDrawerToggle: () => void;
-  logout: () => void;
-  googleLogout: () => void;
 }
 
 const Navbar: React.FC<INavbarProps> = (props) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
-    props.logout();
-    props.googleLogout();
+    dispatch(logout());
+    dispatch(googleLogout());
   };
 
-  const { isAuthenticated, user } = props.auth;
-  const auth_links = (
-    <div>
-      <Typography variant="h6" className="navbar-text-username">
-        {user ? `Hello, ${user.username}` : ""}
-      </Typography>
-    </div>
-  );
-  const guest_links = (
-    <div>
-      <Typography variant="h6" noWrap className="navbar-text-register">
-        Register
-      </Typography>
-      <Typography variant="h6" noWrap className="navbar-text-login">
-        Login
-      </Typography>
-    </div>
-  );
+  const { user } = useSelector((state: IRootState) => state.auth);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
     <Fragment>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          {isAuthenticated ? auth_links : guest_links}
-          <button onClick={handleLogout}>Logout</button>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={props.handleDrawerToggle}
+            className={classes.menuButton}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" className={classes.username}>
+            {user ? user.username : ""}
+          </Typography>
+          <Button onClick={() => handleLogout()} className={classes.button}>
+            Logout
+          </Button>
+          <IconButton onClick={handleClick} color="inherit">
+            <SettingsIcon />
+          </IconButton>
+
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={handleClose}>Profile</MenuItem>
+            <MenuItem onClick={handleClose}>My account</MenuItem>
+            <MenuItem onClick={handleClose}>Logout</MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
     </Fragment>
   );
 };
 
-const mapStateToProps = (state: IRootState) => ({
-  auth: state.auth,
-});
-
-export default connect(mapStateToProps, { logout, googleLogout })(Navbar);
+export default Navbar;

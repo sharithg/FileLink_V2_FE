@@ -11,7 +11,7 @@ import {
 
 const initialState: IClassesState = {
   classes: [],
-  current_class: null,
+  current_class: "",
   classes_loaded: false,
 };
 

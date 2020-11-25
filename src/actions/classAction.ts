@@ -24,7 +24,7 @@ export const getClasses = () => (
       dispatch({ type: CLASSES_LOADED, payload: true });
     })
     .catch((err) =>
-      dispatch(returnErrors(err.response.data, err.response.status))
+      console.log(err)
     );
 };
 
@@ -69,4 +69,8 @@ export const setCurrClass = (dash_id: string) => (dispatch: Dispatch) => {
     type: SET_CURR_CLASS,
     payload: dash_id,
   });
+};
+
+export const testErr = () => (dispatch: Dispatch) => {
+  dispatch(returnErrors("THis is a test", "400"))
 };

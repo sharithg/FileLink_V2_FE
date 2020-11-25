@@ -7,6 +7,7 @@ import authReducer from "./authReducer";
 import googleReducer from "./googleReducer";
 import classesReducer from "./classesReducer";
 import reactReducer from "./reactReducer";
+import eventsReducer from "./eventsReducer";
 export default combineReducers({
   files: filesReducer,
   errors: errors,
@@ -15,4 +16,5 @@ export default combineReducers({
   google: googleReducer,
   classes: classesReducer,
   react: reactReducer,
+  events: eventsReducer,
 });

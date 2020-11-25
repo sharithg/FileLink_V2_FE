@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect, ChangeEvent } from "react";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -23,7 +23,7 @@ import { setCurrentAddFile } from "../../actions/reactActions";
 import { deleteFile, addFile } from "../../actions/filesAction";
 import { TheTextField, CancelButton, SaveButton } from "../../CustomMUI";
 import { IRootState } from "../../actions/types";
-import { IFiles, IClasses } from "../../actions/types";
+import { IFiles } from "../../actions/types";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,11 +55,6 @@ interface IAddFilesProps {
   current_class: string;
   file_icon_url: string;
   file_type: string;
-  current_add_file: string | null;
-  classes: Array<IClasses>;
-  setCurrentAddFile: (file_type: string) => void;
-  addFile: (file: object) => void;
-  deleteFile: (id: number) => void;
 }
 
 function isEmptyOrSpaces(str: string) {
@@ -67,15 +62,7 @@ function isEmptyOrSpaces(str: string) {
 }
 
 const AddFile: React.FC<IAddFilesProps> = (props) => {
-  const {
-    files,
-    list_header,
-    current_class,
-    file_icon_url,
-    file_type,
-    current_add_file,
-    classes,
-  } = props;
+  const { files, list_header, current_class, file_icon_url, file_type } = props;
 
   const classesStyle = useStyles();
   const [file_name, setFileName] = useState("");
@@ -84,6 +71,11 @@ const AddFile: React.FC<IAddFilesProps> = (props) => {
   const [delete_file, setDeleteFile] = useState("");
   const [delete_file_id, setDeleteFileId] = useState(-1);
   const [is_disabled_add, setDisabledAdd] = useState(true);
+  const current_add_file = useSelector(
+    (state: IRootState) => state.react.current_add_file
+  );
+  const classes = useSelector((state: IRootState) => state.classes.classes);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (file_type === "docs") {
@@ -104,26 +96,28 @@ const AddFile: React.FC<IAddFilesProps> = (props) => {
   const handleAddFile = () => {
     console.log(current_add_file);
     console.log(file_type);
-    props.setCurrentAddFile(file_type);
+    dispatch(setCurrentAddFile(file_type));
   };
 
   const handleSave = () => {
     console.log(file_name);
     // event.preventDefault();
     if (!/^\d+$/.test(file_name)) {
+      console.log(classes);
       let add_class_id = classes.filter(
         (col_class) => col_class.name === current_class
       );
+      console.log(add_class_id);
       const file = {
         file_type,
         file_name,
         college_class: add_class_id[0].id,
       };
       console.log(file_name);
-      props.addFile(file);
+      dispatch(addFile(file));
     }
     setFileName("");
-    props.setCurrentAddFile("");
+    dispatch(setCurrentAddFile(""));
   };
 
   const handleDeleteFile = (name: string, id: number) => {
@@ -222,7 +216,7 @@ const AddFile: React.FC<IAddFilesProps> = (props) => {
             className={classesStyle.button}
             startIcon={<DeleteIcon />}
             onClick={() => {
-              props.setCurrentAddFile("");
+              dispatch(setCurrentAddFile(""));
               setFileName("");
             }}
           >
@@ -255,13 +249,4 @@ const AddFile: React.FC<IAddFilesProps> = (props) => {
   );
 };
 
-const mapStateToProps = (state: IRootState) => ({
-  current_add_file: state.react.current_add_file,
-  classes: state.classes.classes,
-});
-
-export default connect(mapStateToProps, {
-  addFile,
-  deleteFile,
-  setCurrentAddFile,
-})(AddFile);
+export default AddFile;

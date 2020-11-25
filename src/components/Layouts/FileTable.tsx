@@ -1,9 +1,8 @@
 import React from "react";
-import { connect } from "react-redux";
 import { AddFile } from "../DriveFiles";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-import { IFiles, IRootState } from "../../actions/types";
+import { IFiles } from "../../actions/types";
 
 interface IFileTableProps {
   files: IFiles[];
@@ -62,9 +61,4 @@ const FileTable: React.FC<Props> = (props) => {
   );
 };
 
-const mapStateToProps = (state: IRootState) => ({
-  // files: state.files.files,
-  current_class: state.classes.current_class,
-});
-
-export default connect(mapStateToProps, null)(FileTable);
+export default FileTable;

@@ -10,7 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { TheTextField } from "../../CustomMUI";
 import { Helmet } from "react-helmet";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { IRootState } from "../../actions/types";
 import { setNewPassword } from "../../actions/authAction";
 import { Loader } from "../../common";
@@ -35,33 +35,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface Props extends RouteComponentProps<{ uidb64: string; token: string }> {
-  setNewPassword: (body: {
-    password: string;
-    uidb64: string;
-    token: string;
-  }) => void;
-  new_password_set: boolean;
-  isResetLoading: boolean;
-}
-
-const ChangePassword: React.FC<Props> = (props) => {
+const ChangePassword: React.FC<RouteComponentProps<{
+  uidb64: string;
+  token: string;
+}>> = (props) => {
   console.log(props.match.params.token, props.match.params.uidb64);
   const classes = useStyles();
   const password = useRef<HTMLInputElement>(null);
   const confirmPassword = useRef<HTMLInputElement>(null);
+  //Redux state
+  const new_password_set = useSelector(
+    (state: IRootState) => state.auth.new_password_set
+  );
+  const isResetLoading = useSelector(
+    (state: IRootState) => state.auth.isResetLoading
+  );
+  const dispatch = useDispatch();
 
   const handleSubmit = (event: MouseEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (password.current === null) return;
-    props.setNewPassword({
-      password: password.current.value,
-      uidb64: props.match.params.uidb64,
-      token: props.match.params.token,
-    });
+    dispatch(
+      setNewPassword({
+        password: password.current.value,
+        uidb64: props.match.params.uidb64,
+        token: props.match.params.token,
+      })
+    );
   };
-  if (props.new_password_set) return <h1>Password successfully changed</h1>;
-  if (props.isResetLoading) return <Loader />;
+  if (new_password_set) return <h1>Password successfully changed</h1>;
+  if (isResetLoading) return <Loader />;
 
   return (
     <Container component="main" maxWidth="xs">
@@ -119,9 +122,4 @@ const ChangePassword: React.FC<Props> = (props) => {
   );
 };
 
-const mapStateToProps = (state: IRootState) => ({
-  new_password_set: state.auth.new_password_set,
-  isResetLoading: state.auth.isLoading,
-});
-
-export default connect(mapStateToProps, { setNewPassword })(ChangePassword);
+export default ChangePassword;

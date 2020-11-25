@@ -10,7 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { login } from "../../actions/authAction";
 import { Redirect, Link } from "react-router-dom";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { IRootState } from "../../actions/types";
 import { Helmet } from "react-helmet";
 import { TheTextField } from "../../CustomMUI";
@@ -45,23 +45,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface ILoginProps {
-  login: (username: string, password: string) => void;
-  isAuthenticated: boolean | null;
-}
-
-const Login: React.FC<ILoginProps> = (props) => {
+const Login: React.FC = (props) => {
   const classes = useStyles();
   const username = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
+  //Redux state
+  const isAuthenticated = useSelector(
+    (state: IRootState) => state.auth.isAuthenticated
+  );
+  const dispatch = useDispatch();
 
   const handleSubmit = (event: MouseEvent<HTMLFormElement>) => {
     if (username.current === null || password.current === null) return;
     event.preventDefault();
-    props.login(username.current.value, password.current.value);
+    dispatch(login(username.current.value, password.current.value));
   };
 
-  if (props.isAuthenticated) {
+  if (isAuthenticated) {
     return <Redirect to="/dashboard" />;
   }
 
@@ -132,11 +132,7 @@ const Login: React.FC<ILoginProps> = (props) => {
   );
 };
 
-const mapStateToProps = (state: IRootState) => ({
-  isAuthenticated: state.auth.isAuthenticated,
-});
-
-export default connect(mapStateToProps, { login })(Login);
+export default Login;
 
 // import React, { Component, Fragment } from "react";
 // import { connect } from "react-redux";

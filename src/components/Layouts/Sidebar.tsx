@@ -10,7 +10,7 @@ import ClassIcon from "@material-ui/icons/Class";
 import AddIcon from "@material-ui/icons/Add";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { addClass } from "../../actions/classAction";
 import { setCurrClass } from "../../actions/classAction";
 import { makeStyles } from "@material-ui/core/styles";
@@ -32,15 +32,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface ISidebarProps {
-  current_class: string | null;
   classes: Array<IClasses>;
-  classes_loaded: boolean;
-  addClass: (class_name: { name: string }) => void;
-  setCurrClass: (dash_id: string) => void;
 }
 
 const Sidebar: React.FC<ISidebarProps> = (props) => {
   const classes = useStyles();
+  const current_class = useSelector(
+    (state: IRootState) => state.classes.current_class
+  );
+  const dispatch = useDispatch();
 
   const dashboard = [
     {
@@ -68,7 +68,7 @@ const Sidebar: React.FC<ISidebarProps> = (props) => {
   };
 
   const handleSave = () => {
-    props.addClass({ name: class_name });
+    dispatch(addClass({ name: class_name }));
     setClassName("");
     setAddClass(false);
   };
@@ -121,8 +121,8 @@ const Sidebar: React.FC<ISidebarProps> = (props) => {
         {dashboard.map((dash) => (
           <MenuItem
             button
-            onClick={() => props.setCurrClass(dash.sel)}
-            selected={dash.sel === props.current_class}
+            onClick={() => dispatch(setCurrClass(dash.sel))}
+            selected={dash.sel === current_class}
             key={dash.sel}
             component={Link}
             to={dash.link}
@@ -146,8 +146,8 @@ const Sidebar: React.FC<ISidebarProps> = (props) => {
         {props.classes.map((col_class, index) => (
           <MenuItem
             button
-            onClick={() => props.setCurrClass(col_class.name)}
-            selected={col_class.name === props.current_class}
+            onClick={() => dispatch(setCurrClass(col_class.name))}
+            selected={col_class.name === current_class}
             key={col_class.id}
             component={Link}
             to={`/dashboard/class/${col_class.name.toLowerCase()}`}
@@ -211,9 +211,4 @@ const Sidebar: React.FC<ISidebarProps> = (props) => {
   );
 };
 
-const mapStateToProps = (state: IRootState) => ({
-  current_class: state.classes.current_class,
-  classes_loaded: state.classes.classes_loaded,
-});
-
-export default connect(mapStateToProps, { addClass, setCurrClass })(Sidebar);
+export default Sidebar;

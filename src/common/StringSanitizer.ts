@@ -14,7 +14,7 @@ export default class StringSanitizer {
   }
 
   hasSpecialChars() {
-    return /[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?@]/g.test(this.inputString); // eslint-disable-line no-useless-escape
+    return /[~`!#$%\^&*+=\-\[\]\\';,/{}()|\\":<>\?@]/g.test(this.inputString); // eslint-disable-line no-useless-escape
   }
 
   getString() {

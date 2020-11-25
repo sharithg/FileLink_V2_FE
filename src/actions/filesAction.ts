@@ -33,7 +33,7 @@ export const deleteFile = (id: Number) => (
   axios
     .delete(`http://${DOMAIN}/api/drivelinks/${id}`, tokenConfig(getState))
     .then((res) => {
-      dispatch(createMessage({ file_deleted: "File Deleted" }));
+      dispatch(createMessage("File Deleted"));
       dispatch({
         type: DELETE_FILE,
         payload: id,
@@ -51,7 +51,7 @@ export const addFile = (file: object) => (
   axios
     .post(`http://${DOMAIN}/api/drivelinks/`, file, tokenConfig(getState))
     .then((res) => {
-      dispatch(createMessage({ file_added: "File Added" }));
+      dispatch(createMessage("File Added"));
       dispatch({
         type: ADD_FILE,
         payload: res.data,

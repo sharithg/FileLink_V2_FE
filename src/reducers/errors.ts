@@ -1,8 +1,14 @@
-import { GET_ERRORS, IErrorsState, IActionErrors } from "../actions/types";
+import {
+  GET_ERRORS,
+  CLOSE_SNACK,
+  IErrorsState,
+  IActionErrors,
+} from "../actions/types";
 
 const initialState: IErrorsState = {
   message: {},
   status: null,
+  open: false,
 };
 
 const errorMessage = (
@@ -12,8 +18,15 @@ const errorMessage = (
   switch (action.type) {
     case GET_ERRORS:
       return {
+        ...state,
         message: action.payload.message,
         status: action.payload.status,
+        open: true,
+      };
+    case CLOSE_SNACK:
+      return {
+        ...state,
+        open: false,
       };
     default:
       return state;

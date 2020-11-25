@@ -21,6 +21,8 @@ import { Provider } from "react-redux";
 import store from "../store";
 import { loadUser } from "../actions/authAction";
 import Error from "./Layouts/404";
+import ErrorSnack from "../common/ErrorSnack";
+import MessageSnack from "../common/MessageSnack";
 
 console.log(store);
 
@@ -33,6 +35,8 @@ class App extends Component {
       <Provider store={store}>
         <Router>
           <Fragment>
+            <ErrorSnack />
+            <MessageSnack />
             <div className="container">
               <Switch>
                 <Route exact path="/" component={Home} />
