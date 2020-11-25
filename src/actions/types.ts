@@ -1,4 +1,5 @@
-export const DOMAIN = "127.0.0.1:8000";
+export const DOMAIN =
+  "http://ec2-3-12-132-64.us-east-2.compute.amazonaws.com:8000";
 
 export const GET_FILES = "GET_FILES";
 
@@ -7,6 +8,8 @@ export const DELETE_FILE = "DELETE_FILE";
 export const ADD_FILE = "ADD_FILE";
 
 export const GET_ERRORS = "GET_ERRORS";
+
+export const CLOSE_SNACK = "CLOSE_SNACK";
 
 export const CREATE_MESSAGE = "CREATE_MESSAGE";
 
@@ -52,6 +55,11 @@ export const PASSWORD_RESET_COMPLETE = "PASSWORD_RESET_COMPLETE";
 
 export const RESET_PASSWORD_LOADING = "RESET_PASSWORD_LOADING";
 
+export const ADD_EVENT = "ADD_EVENT";
+
+export const GET_EVENTS = "GET_EVENTS";
+
+export const EVENTS_LOADED = "EVENTS_LOADED";
 /** Redux state types */
 export interface IFiles {
   id: number;
@@ -71,6 +79,7 @@ export interface IFilesState {
 export interface IErrorsState {
   message: any;
   status: string | null;
+  open: boolean;
 }
 
 export interface IMessagesState {
@@ -100,8 +109,21 @@ export interface IClasses {
 }
 export interface IClassesState {
   classes: Array<IClasses>;
-  current_class: string | null;
+  current_class: string;
   classes_loaded: boolean;
+}
+
+export interface IEvents {
+  id?: number;
+  title: string;
+  start: string;
+  end: string;
+  description: string;
+}
+
+export interface IEventsState {
+  events: Array<IEvents>;
+  eventsLoaded: boolean;
 }
 
 export interface IReactState {
@@ -116,6 +138,7 @@ export interface IRootState {
   google: IGoogleState;
   classes: IClassesState;
   react: IReactState;
+  events: IEventsState;
 }
 
 /** Redux action types */
@@ -146,8 +169,13 @@ export interface IActionClasses {
   payload?: any;
 }
 
+export interface IActionEvents {
+  type: typeof ADD_EVENT | typeof GET_EVENTS | typeof EVENTS_LOADED;
+  payload?: any;
+}
+
 export interface IActionErrors {
-  type: typeof GET_ERRORS;
+  type: typeof GET_ERRORS | typeof CLOSE_SNACK;
   payload?: any;
 }
 
